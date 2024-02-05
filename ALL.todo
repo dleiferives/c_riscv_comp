@@ -1,0 +1,7 @@
+TODO:
+- Implement basic test system.
+  - Compile
+  - RARS interpret 
+  - come up with a frameowrk for the rars testing to work off of
+- Add a perper error handling system for the C code
+- Rars testing framework for more complex problems than just an output string
