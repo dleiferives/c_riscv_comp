@@ -1,12 +1,40 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include<stdarg.h>
+
+typedef enum{
+        TK_NUM,
+        TK_EOF,
+        TK_OPERATOR
+}ParserTokenType;
+
+typedef struct ParserToken ParserToken;
+struct ParserToken{
+        ParserTokenType type;
+        char *source;
+        int loc;
+        int len;
+        // IF A TOKEN IS A NUMBER
+        int val;
+        ParserToken *next;
+        ParserToken *prev;
+};
+
+static void error(char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+  exit(1);
+}
 
 // read file and save its content to a string
 char * read_file_to_string(char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        // TODO ADD A PROPER ERROR HANDLING system
+                //
+        error("Error: Could not read file %s\n", filename);
         return NULL;
     }
     fseek(file, 0, SEEK_END);
@@ -48,9 +76,8 @@ int main(int argc, char *argv[]) {
                 printf("Error: Could not read file %s\n", filename);
                 return 1;
         }
-
-        if(compare_strings(content,"1 + 1\n"))
-                printf("li a0, 1\n li a7, 1\n ecall\n");
+        if(compare_strings(content,"1 + 1"))
+                printf("li a0, 1\nli a7, 1\necall\n");
         free(content);
 
         return 0;
